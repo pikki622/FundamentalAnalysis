@@ -35,9 +35,7 @@ def available_companies(api_key):
 
     df = pd.DataFrame(data)
     df.loc[df["name"].isna(), "name"] = df["symbol"]
-    df = df.set_index("symbol")
-
-    return df
+    return df.set_index("symbol")
 
 
 def profile(ticker, api_key):
@@ -69,9 +67,7 @@ def profile(ticker, api_key):
     if 'Error Message' in data:
         raise ValueError(data['Error Message'])
 
-    data_formatted = pd.DataFrame(data).T
-
-    return data_formatted
+    return pd.DataFrame(data).T
 
 
 def quote(ticker, api_key):
@@ -103,9 +99,7 @@ def quote(ticker, api_key):
     if 'Error Message' in data:
         raise ValueError(data['Error Message'])
 
-    data_formatted = pd.DataFrame(data).T
-
-    return data_formatted
+    return pd.DataFrame(data).T
 
 
 def enterprise(ticker, api_key, period="annual", limit=0):
@@ -145,10 +139,7 @@ def enterprise(ticker, api_key, period="annual", limit=0):
 
     data_formatted = {}
     for data in data_json:
-        if period == "quarter":
-            date = data['date'][:7]
-        else:
-            date = data['date'][:4]
+        date = data['date'][:7] if period == "quarter" else data['date'][:4]
         del data['date']
         data_formatted[date] = data
 
@@ -188,9 +179,7 @@ def rating(ticker, api_key):
     for value in data_json:
         del value['symbol']
 
-    data_formatted = pd.DataFrame(data_json).set_index('date')
-
-    return data_formatted
+    return pd.DataFrame(data_json).set_index('date')
 
 
 def discounted_cash_flow(ticker, api_key, period="annual", limit=0):
@@ -261,19 +250,13 @@ def discounted_cash_flow(ticker, api_key, period="annual", limit=0):
     if 'Error Message' in data:
         raise ValueError(data['Error Message'])
 
-    data_formatted = {}
-
     if period == "quarter":
         current_year = data_json_current['date'][:7]
     else:
         current_year = data_json_current['date'][:4]
-    data_formatted[current_year] = data_json_current
-
+    data_formatted = {current_year: data_json_current}
     for data in data_json:
-        if period == "quarter":
-            date = data['date'][:7]
-        else:
-            date = data['date'][:4]
+        date = data['date'][:7] if period == "quarter" else data['date'][:4]
         data_formatted[date] = data
 
     return pd.DataFrame(data_formatted)
