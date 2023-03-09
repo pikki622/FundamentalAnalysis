@@ -74,7 +74,7 @@ def stock_data(ticker, period="max", interval="1d", start=None, end=None):
     try:
         indicators.update(data_json['indicators']['adjclose'][0])
     except Exception as e:
-        print("Data for " + str(e) + " could not be included.")
+        print(f"Data for {str(e)} could not be included.")
 
     return pd.DataFrame(indicators, index=dates)
 
@@ -126,9 +126,7 @@ def stock_data_detailed(ticker, api_key, begin="1792-05-17", end=None):
         date = value['date']
         del value['date']
         data_formatted[date] = value
-    data_formatted = pd.DataFrame(data_formatted).T
-
-    return data_formatted
+    return pd.DataFrame(data_formatted).T
 
 
 def stock_dividend(ticker, api_key, begin="1792-05-17", end=None):

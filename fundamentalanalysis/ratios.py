@@ -49,10 +49,7 @@ def key_metrics(ticker, api_key, period="annual", TTM=False, limit=0):
     else:
         data_formatted = {}
         for value in data:
-            if period == "quarter":
-                date = value['date'][:7]
-            else:
-                date = value['date'][:4]
+            date = value['date'][:7] if period == "quarter" else value['date'][:4]
             del value['date']
             del value['symbol']
 
@@ -107,10 +104,7 @@ def financial_ratios(ticker, api_key, period="annual", TTM=False, limit=0):
     else:
         data_formatted = {}
         for value in data:
-            if period == "quarter":
-                date = value['date'][:7]
-            else:
-                date = value['date'][:4]
+            date = value['date'][:7] if period == "quarter" else value['date'][:4]
             del value['date']
             del value['symbol']
 
@@ -157,10 +151,7 @@ def financial_statement_growth(ticker, api_key, period="annual", limit=0):
 
     data_formatted = {}
     for value in data:
-        if period == "quarter":
-            date = value['date'][:7]
-        else:
-            date = value['date'][:4]
+        date = value['date'][:7] if period == "quarter" else value['date'][:4]
         del value['date']
         del value['symbol']
 
